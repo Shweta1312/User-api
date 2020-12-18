@@ -16,4 +16,12 @@ export class UsersController {
   getUsers(): Promise<User[]> {
     return this.usersService.getUsers();
   }
+
+  @Patch('/:id')
+  updateEmailById(
+    @Param('id') id: string,
+    @Body('email') email: string,
+  ): Promise<User> {
+    return this.usersService.updateEmailById(id, email);
+  }
 }
