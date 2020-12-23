@@ -6,10 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './create-user.dto';
 import { User } from './user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -36,5 +39,16 @@ export class UsersController {
   @Delete('/:id')
   deleteUserById(@Param('id') id: string): void {
     this.usersService.deleteUserById(id);
+  }
+
+  // @Get('/redire')
+  // googleAuthRedirect(@Req() req){
+  //   return this.usersService.loggedIn(req);
+  // }
+
+  @UseGuards(AuthGuard('google'))
+  @Get('/signin')
+  googleSignIn(@Req() req): Promise<User> {
+    return this.usersService.signIn(req);
   }
 }

@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -37,5 +38,31 @@ export class UsersService {
     if (user.affected == 0) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
+  }
+
+  // loggedIn(req) {
+  //   if (!req.user) {
+  //     return 'No user from google';
+  //   }
+
+  //   return {
+  //     message: 'User information from google',
+  //     user: req.user.name,
+  //   };
+  // }
+
+  async signIn(req): Promise<User> {
+    if (!req.user) {
+      throw new NotFoundException('User not found');
+    } 
+    const user: User = new User();
+    user.userName = req.user.name;
+    user.email = req.user.email;
+    try {
+      await user.save();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+    return user;
   }
 }
