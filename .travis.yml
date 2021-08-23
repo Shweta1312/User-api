@@ -1,2 +1,2 @@
 before_install:
-  - npm i -g npm@version-number
+  - npm i
